@@ -1,0 +1,4 @@
+/vis/open OGL                                   # Use OpenGL
+/vis/drawVolume                                 # Draw volumes
+
+/vis/scene/add/trajectories smooth              # Add smooth particle trajectories
