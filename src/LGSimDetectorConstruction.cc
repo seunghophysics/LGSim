@@ -3,6 +3,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
 
 #include "LGSimDetectorConstruction.hh"
@@ -30,9 +31,14 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4VPhysicalVolume* worldPV = new G4PVPlacement(G4Transform3D(), "WorldPV", worldLV, 0, false, 0);
     
     // Lead-glass
-    G4Box *lgSolid = new G4Box("LGSolid", 15.*cm, 5.*cm, 5.*cm);
-    G4LogicalVolume* lgLV = new G4LogicalVolume(lgSolid, leadglass, "LGLV");
-    new G4PVPlacement(G4Transform3D(), "LGPV", lgLV, worldPV, false, 0);
+    G4Box *lgBoxSolid = new G4Box("LGBoxSolid", 15.*cm, 5.*cm, 5.*cm);
+    G4LogicalVolume* lgBoxLV = new G4LogicalVolume(lgBoxSolid, leadglass, "LGBoxLV");
+    new G4PVPlacement(G4Transform3D(), "LGBoxPV", lgBoxLV, worldPV, false, 0);
+    
+    G4Tubs *lgTubeSolid = new G4Tubs("LGTubeSolid", 0, 3.5*cm, 1.5*cm, 0, 360.*deg);
+    G4LogicalVolume* lgTubeLV = new G4LogicalVolume(lgTubeSolid, leadglass, "LGTubeLV");
+    G4RotationMatrix rotLGTube; rotLGTube.rotateY(90.*deg); G4ThreeVector vLGTube(16.5*cm, 0, 0);
+    new G4PVPlacement(G4Transform3D(rotLGTube, vLGTube), "LGTubePV", lgTubeLV, worldPV, false, 0, true);
     
     // Visualization settings
     worldLV->SetVisAttributes(G4VisAttributes::Invisible);
