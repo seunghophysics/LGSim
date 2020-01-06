@@ -12,7 +12,7 @@ class LGSimSensitiveDetector : public G4VSensitiveDetector
         ~LGSimSensitiveDetector();
         
         void Initialize(G4HCofThisEvent*);
-        G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+        G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*);
         void EndOfEvent(G4HCofThisEvent*);
     
     private:

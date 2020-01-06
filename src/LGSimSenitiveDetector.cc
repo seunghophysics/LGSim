@@ -11,9 +11,13 @@ void LGSimSensitiveDetector::Initialize(G4HCofThisEvent*)
     q = 0.;
 }
 
-G4bool LGSimSensitiveDetector::ProcessHits(G4Step*, G4TouchableHistory*)
-{
-    q += 2.e-12;
+G4bool LGSimSensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+{   
+    auto particle = aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    
+    if(particle == "opticalphoton")
+        q += 2.e-12;
+    
     return true;
 }
 
