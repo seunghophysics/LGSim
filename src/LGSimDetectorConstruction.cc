@@ -38,13 +38,13 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4VPhysicalVolume* worldPV = new G4PVPlacement(G4Transform3D(), "WorldPV", worldLV, 0, false, 0);
     
     // Lead-glass
-    G4Box *lgBoxSolid = new G4Box("LGBoxSolid", 15.*cm, 5.*cm, 5.*cm);
+    G4Box *lgBoxSolid = new G4Box("LGBoxSolid", 5.*cm, 5.*cm, 15.*cm);
     G4LogicalVolume* lgBoxLV = new G4LogicalVolume(lgBoxSolid, leadglass, "LGBoxLV");
     G4VPhysicalVolume* lgBoxPV = new G4PVPlacement(G4Transform3D(), "LGBoxPV", lgBoxLV, worldPV, false, 0);
     
     G4Tubs *lgTubeSolid = new G4Tubs("LGTubeSolid", 0, 3.5*cm, 1.5*cm, 0, 360.*deg);
     G4LogicalVolume* lgTubeLV = new G4LogicalVolume(lgTubeSolid, leadglass, "LGTubeLV");
-    G4RotationMatrix rotLGTube; rotLGTube.rotateY(90.*deg); G4ThreeVector vLGTube(16.5*cm, 0, 0);
+    G4RotationMatrix rotLGTube; rotLGTube.rotateY(0.*deg); G4ThreeVector vLGTube(0, 0, 16.5*cm);
     new G4PVPlacement(G4Transform3D(rotLGTube, vLGTube), "LGTubePV", lgTubeLV, worldPV, false, 0, true);
     
     G4OpticalSurface* lgSurface = new G4OpticalSurface("LGSurface");
@@ -56,7 +56,7 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     // PMT Photocathode as SD
     G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 3.5*cm, 0.1*cm, 0, 360.*deg);
     G4LogicalVolume* cathodeLV = new G4LogicalVolume(cathodeSolid, leadglass, "CathodeLV");
-    G4RotationMatrix rotCathode; rotCathode.rotateY(90.*deg); G4ThreeVector vCathode(18.1*cm, 0, 0);
+    G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(0, 0, 18.1*cm);
     new G4PVPlacement(G4Transform3D(rotCathode, vCathode), "LGTubePV", cathodeLV, worldPV, false, 0, true);
     
     LGSimSensitiveDetector* aSD = new LGSimSensitiveDetector(fRunAction, "LGSimSD");
