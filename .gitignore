@@ -37,3 +37,6 @@
 # Build and binary
 build/
 bin/
+
+# Output
+*.txt
