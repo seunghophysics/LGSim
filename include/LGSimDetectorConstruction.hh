@@ -3,13 +3,18 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
+class LGSimRunAction;
+
 class LGSimDetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-        LGSimDetectorConstruction();
+        LGSimDetectorConstruction(LGSimRunAction* runAction);
         ~LGSimDetectorConstruction();
         
         G4VPhysicalVolume* Construct();
+        
+    private:
+        LGSimRunAction* fRunAction;
 };
 
 #endif
