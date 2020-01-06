@@ -16,7 +16,7 @@ void LGSimRunAction::EndOfRunAction(const G4Run*)
     txt.close();
 }
 
-inline void LGSimRunAction::Fill(G4double q)
+void LGSimRunAction::Fill(G4double q)
 {
     txt << q << "\n";
 }
