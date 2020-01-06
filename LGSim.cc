@@ -5,19 +5,24 @@
 #include "G4VisExecutive.hh"
 #include "FTFP_BERT.hh"
 
-#include "LGSimDetectorConstruction.hh"
 #include "LGSimActionInitialization.hh"
+#include "LGSimDetectorConstruction.hh"
+#include "LGSimPrimaryGeneratorAction.hh"
+#include "LGSimRunAction.hh"
 
 int main(int argc, char** argv)
 {
     // physics list
-    auto LGSimPhysicsList = new FTFP_BERT();
-    LGSimPhysicsList->RegisterPhysics(new G4OpticalPhysics());
+    auto physicsList = new FTFP_BERT();
+    physicsList->RegisterPhysics(new G4OpticalPhysics());
     
     auto runManager = new G4RunManager();
-    runManager->SetUserInitialization(new LGSimDetectorConstruction());
-    runManager->SetUserInitialization(LGSimPhysicsList);
-    runManager->SetUserInitialization(new LGSimActionInitialization());
+    
+    auto runAction = new LGSimRunAction();
+    runManager->SetUserInitialization(new LGSimDetectorConstruction(runAction));
+    runManager->SetUserInitialization(physicsList);
+    runManager->SetUserAction(new LGSimPrimaryGeneratorAction());
+    runManager->SetUserAction(runAction);
     runManager->Initialize();
     
     auto visExecutive = new G4VisExecutive();
