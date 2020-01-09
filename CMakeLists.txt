@@ -10,6 +10,11 @@ project(${PROJECT_NAME})
 # Find Geant4 and use all drivers for both UI and visualization
 find_package(Geant4 REQUIRED ui_all vis_all)
 
+# Find CRY library
+list(APPEND CMAKE_PREFIX_PATH "/Users/seungho/Development/CRY")
+find_library(CRY_LIB CRY)
+find_path(CRY_INCLUDE_DIR NAMES "CRYSetup.h" PATHS "/Users/seungho/Development/CRY/src")
+
 # Set external libraries correctly to the install rpath for macOS
 if(APPLE)
     message(STATUS "Running on macOS: -DCMAKE_INSTALL_RPATH_USE_LINK_PATH = ON")
@@ -26,7 +31,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # Compile and link G4 libraries to the main app
 add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cc ${sources} ${headers})
-target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES} ${CRY_LIB})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CRY_INCLUDE_DIR})
 
 # Install the executable
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
