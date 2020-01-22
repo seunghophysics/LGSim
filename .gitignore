@@ -40,3 +40,6 @@ bin/
 
 # Output
 *.txt
+
+# Others
+.DS_Store
