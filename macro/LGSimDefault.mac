@@ -1,3 +1,3 @@
 /control/execute macro/LGSimVis.mac            # Visualization settings
 /control/execute macro/LGSimVerbose.mac        # Verbosity settings
-/control/execute macro/LGSimPrimary.mac        # Primary generator settings
+#/control/execute macro/LGSimPrimary.mac        # Primary generator settings

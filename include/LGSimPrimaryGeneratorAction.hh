@@ -4,6 +4,8 @@
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
+class CRYGenerator;
+
 class LGSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
     public:
@@ -14,6 +16,8 @@ class LGSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
     private:
         G4ParticleGun* fParticleGun;
+        G4ParticleTable* fParticleTable;
+        CRYGenerator* fCRYGenerator;
 };
 
 #endif
