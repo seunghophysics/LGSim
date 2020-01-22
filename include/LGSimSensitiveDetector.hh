@@ -16,7 +16,7 @@ class LGSimSensitiveDetector : public G4VSensitiveDetector
         void EndOfEvent(G4HCofThisEvent*);
     
     private:
-        G4double q;
+        G4int nhits;
         LGSimRunAction* fRunAction;
 };
 
