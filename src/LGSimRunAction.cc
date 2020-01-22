@@ -8,7 +8,7 @@ LGSimRunAction::~LGSimRunAction() {}
 
 void LGSimRunAction::BeginOfRunAction(const G4Run*)
 {
-    txt.open("charge_data.txt");
+    txt.open("charge_data.txt", std::ofstream::out | std::ofstream::app);
 }
 
 void LGSimRunAction::EndOfRunAction(const G4Run*)
