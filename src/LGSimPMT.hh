@@ -5,11 +5,11 @@
 
 class LGSimRunAction;
 
-class LGSimSensitiveDetector : public G4VSensitiveDetector
+class LGSimPMT : public G4VSensitiveDetector
 {
     public:
-        LGSimSensitiveDetector(LGSimRunAction* runAction, G4String name);
-        ~LGSimSensitiveDetector();
+        LGSimPMT(LGSimRunAction* runAction, G4String name);
+        ~LGSimPMT();
         
         void Initialize(G4HCofThisEvent*);
         G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*);

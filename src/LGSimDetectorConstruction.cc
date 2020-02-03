@@ -12,7 +12,7 @@
 #include "G4VisAttributes.hh"
 
 #include "LGSimDetectorConstruction.hh"
-#include "LGSimSensitiveDetector.hh"
+#include "LGSimPMT.hh"
 
 LGSimDetectorConstruction::LGSimDetectorConstruction(LGSimRunAction* runAction)
 : fRunAction(runAction) {}
@@ -79,7 +79,7 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(0, 0, 18.1*cm);
     new G4PVPlacement(G4Transform3D(rotCathode, vCathode), "CathodePV", cathodeLV, worldPV, false, 0, true);
     
-    LGSimSensitiveDetector* aSD = new LGSimSensitiveDetector(fRunAction, "LGSimSD");
+    LGSimPMT* aSD = new LGSimPMT(fRunAction, "LGSimSD");
     cathodeLV->SetSensitiveDetector(aSD);
     G4SDManager* sdManager = G4SDManager::GetSDMpointer();
     sdManager->AddNewDetector(aSD);

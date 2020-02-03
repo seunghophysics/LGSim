@@ -2,10 +2,12 @@
 #define LGSimPrimaryGeneratorAction_HH 1
 
 #include "G4ParticleGun.hh"
+#include "G4Types.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class CRYGenerator;
 
+G4bool HitsScintillators(G4ThreeVector pos, G4ThreeVector dir);
 class LGSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
     public:
@@ -19,5 +21,6 @@ class LGSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         G4ParticleTable* fParticleTable;
         CRYGenerator* fCRYGenerator;
 };
+
 
 #endif
