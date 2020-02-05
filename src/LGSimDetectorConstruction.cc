@@ -64,28 +64,29 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4VPhysicalVolume* worldPV = new G4PVPlacement(G4Transform3D(), "WorldPV", worldLV, 0, false, 0);
     //
     // Lead-glass block
-    G4Box* lgBoxSolid = new G4Box("LGBoxSolid", 5.*cm, 5.*cm, 15.*cm);
+    G4Trap* lgBoxSolid = new G4Trap("LGBoxSolid", 122.*mm, 340.*mm, 135.*mm, 113.*mm);
     G4LogicalVolume* lgBoxLV = new G4LogicalVolume(lgBoxSolid, leadglass, "LGBoxLV");
-    G4VPhysicalVolume* lgBoxPV = new G4PVPlacement(G4Transform3D(), "LGBoxPV", lgBoxLV, worldPV, false, 0);
+    G4RotationMatrix rotLGBox; rotLGBox.rotateX(270.*deg); G4ThreeVector vLGBox(0, 0, 0);
+    G4VPhysicalVolume* lgBoxPV = new G4PVPlacement(G4Transform3D(rotLGBox, vLGBox), "LGBoxPV", lgBoxLV, worldPV, false, 0);
     //
     // light guide
-    G4Tubs *lgTubeSolid = new G4Tubs("LGTubeSolid", 0, 3.5*cm, 1.5*cm, 0, 360.*deg);
+    G4Tubs *lgTubeSolid = new G4Tubs("LGTubeSolid", 0, 38.*mm, 15.*mm, 0, 360.*deg);
     G4LogicalVolume* lgTubeLV = new G4LogicalVolume(lgTubeSolid, leadglass, "LGTubeLV");
-    G4RotationMatrix rotLGTube; rotLGTube.rotateY(0.*deg); G4ThreeVector vLGTube(0, 0, 16.5*cm);
+    G4RotationMatrix rotLGTube; rotLGTube.rotateY(0.*deg); G4ThreeVector vLGTube(5.5*mm, 0, 185.*mm);
     new G4PVPlacement(G4Transform3D(rotLGTube, vLGTube), "LGTubePV", lgTubeLV, worldPV, false, 0, true);
     //
     // Al cover
-    G4Box* alBoxSolid = new G4Box("AlBoxSolid", 5.*cm, 5.*cm, 0.1*cm);
-    G4Tubs* alTubeSolid = new G4Tubs("AlTubeSolid", 0, 3.5*cm, 0.1*cm, 0, 360.*deg);
+    G4Box* alBoxSolid = new G4Box("AlBoxSolid", 67.5*mm, 61.*mm, 0.1*mm);
+    G4Tubs* alTubeSolid = new G4Tubs("AlTubeSolid", 0, 38.*mm, 0.1*mm, 0, 360.*deg);
     G4VSolid* alPlateSolid = new G4SubtractionSolid("AlPlateSolid", alBoxSolid, alTubeSolid, G4Transform3D());
     G4LogicalVolume* alPlateLV = new G4LogicalVolume(alPlateSolid, al, "AlPlateLV");
-    G4RotationMatrix rotAlPlate; rotAlPlate.rotateY(0.*deg); G4ThreeVector vAlPlate(0, 0, 15.1*cm);
+    G4RotationMatrix rotAlPlate; rotAlPlate.rotateY(0.*deg); G4ThreeVector vAlPlate(5.5*mm, 0, 170.1*mm);
     G4VPhysicalVolume* alPlatePV = new G4PVPlacement(G4Transform3D(rotAlPlate, vAlPlate), "AlPlatePV", alPlateLV, worldPV, false, 0, true);
     //
     // PMT Photocathode
-    G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 3.5*cm, 0.1*cm, 0, 360.*deg);
+    G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 38.*mm, 1.*mm, 0, 360.*deg);
     G4LogicalVolume* cathodeLV = new G4LogicalVolume(cathodeSolid, leadglass, "CathodeLV");
-    G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(0, 0, 18.1*cm);
+    G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(5.5*mm, 0, 201.*mm);
     new G4PVPlacement(G4Transform3D(rotCathode, vCathode), "CathodePV", cathodeLV, worldPV, false, 0, true);
     
     
