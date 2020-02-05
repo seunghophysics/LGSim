@@ -22,14 +22,14 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
     G4double y_bottom = pos.y() + dir.y() * t_bottom;
     G4double z_bottom = pos.z() + dir.z() * t_bottom;
     
-    G4cout << "y_top: " << y_top / cm << " z_top: " << z_top / cm << G4endl;
-    G4cout << "y_bottom: " << y_bottom / cm << " z_bottom: " << z_bottom / cm << G4endl;
+    //G4cout << "y_top: " << y_top / cm << " z_top: " << z_top / cm << G4endl;
+    //G4cout << "y_bottom: " << y_bottom / cm << " z_bottom: " << z_bottom / cm << G4endl;
     
     G4bool hitsTopBar = (-30*cm < y_top && y_top < 5*cm && -5*cm < z_top && z_top < 5*cm);
     G4bool hitsBottomBar = (-5*cm < y_bottom && y_bottom < 30*cm && -5*cm < z_bottom && z_bottom < 5*cm);
     
-    G4cout << "hitsTopBar: " << hitsTopBar << G4endl;
-    G4cout << "hitsBottomBar: " << hitsBottomBar << G4endl;
+    //G4cout << "hitsTopBar: " << hitsTopBar << G4endl;
+    //G4cout << "hitsBottomBar: " << hitsBottomBar << G4endl;
     
     return hitsTopBar && hitsBottomBar;
 }
@@ -75,14 +75,14 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             particleName = CRYUtils::partName((*evVector)[j]->id());
             
             //....debug output  
-            G4cout << "  "          << particleName << " "
-                 << "charge = "      << (*evVector)[j]->charge() << " "
-                 << "energy (MeV) = " << (*evVector)[j]->ke() * MeV << " "
-                 << "pos (m) "
-                 << G4ThreeVector((*evVector)[j]->x(), (*evVector)[j]->y(), (*evVector)[j]->z())
-                 << " " << "direction cosines "
-                 << G4ThreeVector((*evVector)[j]->u(), (*evVector)[j]->v(), (*evVector)[j]->w())
-                 << " " << G4endl;
+            //G4cout << "  "          << particleName << " "
+            //    << "charge = "      << (*evVector)[j]->charge() << " "
+            //     << "energy (MeV) = " << (*evVector)[j]->ke() * MeV << " "
+            //     << "pos (m) "
+            //     << G4ThreeVector((*evVector)[j]->x(), (*evVector)[j]->y(), (*evVector)[j]->z())
+            //     << " " << "direction cosines "
+            //    << G4ThreeVector((*evVector)[j]->u(), (*evVector)[j]->v(), (*evVector)[j]->w())
+            //     << " " << G4endl;
             
             G4ThreeVector pos = G4ThreeVector(10*cm, (*evVector)[j]->x()*m, (*evVector)[j]->y()*m);
             G4ThreeVector dir = G4ThreeVector((*evVector)[j]->w(), (*evVector)[j]->u(), (*evVector)[j]->v());
@@ -95,7 +95,7 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle((*evVector)[j]->PDGid()));
             fParticleGun->SetParticleEnergy((*evVector)[j]->ke()*MeV);
             fParticleGun->GeneratePrimaryVertex(anEvent);
-            G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
+            //G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
             }
             else{
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
