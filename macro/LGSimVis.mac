@@ -2,3 +2,4 @@
 /vis/drawVolume                                 # Draw volumes
 
 /vis/scene/add/trajectories smooth              # Add smooth particle trajectories
+/vis/scene/add/axes 0 0 0 20 cm 
