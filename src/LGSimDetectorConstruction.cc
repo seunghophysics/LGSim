@@ -12,10 +12,10 @@
 #include "G4VisAttributes.hh"
 
 #include "LGSimDetectorConstruction.hh"
+#include "LGSimLGSD.hh"
 #include "LGSimPMT.hh"
 
-LGSimDetectorConstruction::LGSimDetectorConstruction(LGSimRunAction* runAction)
-: fRunAction(runAction) {}
+LGSimDetectorConstruction::LGSimDetectorConstruction() {}
 
 LGSimDetectorConstruction::~LGSimDetectorConstruction() {}
 
@@ -79,13 +79,19 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(0, 0, 18.1*cm);
     new G4PVPlacement(G4Transform3D(rotCathode, vCathode), "CathodePV", cathodeLV, worldPV, false, 0, true);
     
-    LGSimPMT* aSD = new LGSimPMT(fRunAction, "LGSimSD");
-    cathodeLV->SetSensitiveDetector(aSD);
-    G4SDManager* sdManager = G4SDManager::GetSDMpointer();
-    sdManager->AddNewDetector(aSD);
-    
     // Visualization settings
     worldLV->SetVisAttributes(G4VisAttributes::Invisible);
     
     return worldPV;
+}
+
+void LGSimDetectorConstruction::ConstructSDandField()
+{
+    LGSimLGSD* lgSD = new LGSimLGSD("LGSD");
+    G4SDManager::GetSDMpointer()->AddNewDetector(lgSD);
+    SetSensitiveDetector("LGBoxLV", lgSD);
+    
+    LGSimPMT* pmtSD = new LGSimPMT("PMTSD");
+    G4SDManager::GetSDMpointer()->AddNewDetector(pmtSD);
+    SetSensitiveDetector("CathodeLV", pmtSD);
 }

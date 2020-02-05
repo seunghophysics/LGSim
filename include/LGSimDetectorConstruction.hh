@@ -8,13 +8,11 @@ class LGSimRunAction;
 class LGSimDetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-        LGSimDetectorConstruction(LGSimRunAction* runAction);
+        LGSimDetectorConstruction();
         ~LGSimDetectorConstruction();
         
         G4VPhysicalVolume* Construct();
-        
-    private:
-        LGSimRunAction* fRunAction;
+        void ConstructSDandField();
 };
 
 #endif
