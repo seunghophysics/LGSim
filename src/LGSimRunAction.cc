@@ -1,22 +1,36 @@
 #include <iostream>
 #include <fstream>
 
+#include "G4AutoLock.hh"
+#include "globals.hh"
+
+#include "LGSimAnalysis.hh"
 #include "LGSimRunAction.hh"
 
 LGSimRunAction::LGSimRunAction() {}
-LGSimRunAction::~LGSimRunAction() {}
+LGSimRunAction::~LGSimRunAction() { delete G4AnalysisManager::Instance(); }
 
 void LGSimRunAction::BeginOfRunAction(const G4Run*)
-{
-    txt.open("charge_data.txt", std::ofstream::out | std::ofstream::app);
+{   
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->OpenFile("data");
+    analysisManager->SetFirstNtupleId(1);
+    analysisManager->SetFirstNtupleColumnId(1);
+    
+    analysisManager->CreateNtuple("lg", "kinematics");
+    analysisManager->CreateNtupleDColumn("initial_KE");
+    analysisManager->CreateNtupleDColumn("path_length");
+    analysisManager->CreateNtupleDColumn("e_dep");
+    analysisManager->FinishNtuple();
+    
+    analysisManager->CreateNtuple("pmt", "charge");
+    analysisManager->CreateNtupleDColumn("charge");
+    analysisManager->FinishNtuple();
 }
 
 void LGSimRunAction::EndOfRunAction(const G4Run*)
-{
-    txt.close();
-}
-
-void LGSimRunAction::Fill(G4double q)
-{
-    txt << q << "\n";
+{   
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->Write();
+    analysisManager->CloseFile();
 }
