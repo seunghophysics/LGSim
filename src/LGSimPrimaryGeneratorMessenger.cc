@@ -8,7 +8,7 @@ LGSimPrimaryGeneratorMessenger::LGSimPrimaryGeneratorMessenger(LGSimPrimaryGener
 : fPGA(PGA)
 {
     fDir = new G4UIdirectory("/CRY/");
-    fDir->SetGuidance("CRY on/off control");
+    fDir->SetGuidance("CRY control");
     
     fCmdTurnOnOff = new G4UIcmdWithAString("/CRY/turn", this);
     fCmdTurnOnOff->SetGuidance("Turn on/off CRY.");
