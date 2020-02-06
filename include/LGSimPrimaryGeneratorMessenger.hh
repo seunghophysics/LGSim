@@ -5,6 +5,7 @@
 
 class LGSimPrimaryGeneratorAction;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 class LGSimPrimaryGeneratorMessenger : public G4UImessenger
 {
@@ -17,7 +18,8 @@ class LGSimPrimaryGeneratorMessenger : public G4UImessenger
     private:
         LGSimPrimaryGeneratorAction* fPGA;
         G4UIdirectory* fDir;
-        G4UIcmdWithAString* fCmd;
+        G4UIcmdWithAString* fCmdTurnOnOff;
+        G4UIcmdWithAnInteger* fCmdVerbose;
 };
 
 #endif

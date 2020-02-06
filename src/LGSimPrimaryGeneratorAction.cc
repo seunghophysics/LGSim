@@ -37,7 +37,7 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 
 LGSimPrimaryGeneratorAction::LGSimPrimaryGeneratorAction()
 : fParticleGun(nullptr), fParticleTable(nullptr), 
-fCRYGenerator(nullptr), bCRY_STATUS(true), fPrimaryGeneratorMessenger(nullptr)
+fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fPrimaryGeneratorMessenger(nullptr)
 {
     fParticleGun = new G4ParticleGun();
     fParticleTable = G4ParticleTable::GetParticleTable();
@@ -105,7 +105,8 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle((*evVector)[j]->PDGid()));
             fParticleGun->SetParticleEnergy((*evVector)[j]->ke()*MeV);
             fParticleGun->GeneratePrimaryVertex(anEvent);
-            G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
+            if(fCRYVerbosity)
+                G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
             }
             else{
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
