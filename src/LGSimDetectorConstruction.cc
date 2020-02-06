@@ -55,6 +55,59 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     
   
     //----------------------------------------------------------------------------------
+    // ** Optical Properties **
+    //----------------------------------------------------------------------------------
+    //
+    // SF6W optical properties
+    G4double refEnergy[] = {1.24*eV, 1.27*eV, 1.29*eV, 1.32*eV, 1.35*eV, 
+                            1.38*eV, 1.41*eV, 1.44*eV, 1.48*eV, 1.51*eV, 
+                            1.55*eV, 1.59*eV, 1.63*eV, 1.68*eV, 1.72*eV, 
+                            1.77*eV, 1.82*eV, 1.88*eV, 1.94*eV, 2.0*eV, 
+                            2.07*eV, 2.14*eV, 2.21*eV, 2.3*eV, 2.38*eV, 
+                            2.48*eV, 2.58*eV, 2.7*eV, 2.82*eV, 2.95*eV, 
+                            3.1*eV, 3.26*eV, 3.44*eV, 3.65*eV, 3.87*eV,
+                            4.13*eV, 4.43*eV, 4.77*eV, 5.17*eV, 5.64*eV, 6.2*eV};
+    G4double refIndex[] = {1.77568, 1.77635, 1.77705, 1.77779, 1.77858, 
+                            1.77941, 1.78029, 1.78123, 1.78223, 1.7833, 
+                            1.78445, 1.78569, 1.78703, 1.78847, 1.79004, 
+                            1.79176, 1.79363, 1.79569, 1.79796, 1.80048, 
+                            1.80328, 1.80641, 1.80993, 1.81391, 1.81844, 
+                            1.82365, 1.82968, 1.83673, 1.84508, 1.85511, 
+                            1.86739, 1.88274, 1.9025, 1.92879, 1.96527,
+                            2.01844, 2.10029, 2.23367, 2.4627, 2.87238, 3.62362};           
+    const G4int refNbins = sizeof(refEnergy) / sizeof(G4double);
+    assert(sizeof(refEnergy) == sizeof(refIndex));
+
+    G4double absEnergy[] = {0.62*eV, 0.83*eV, 1.17*eV, 1.55*eV, 1.77*eV, 
+                            1.91*eV, 2.07*eV, 2.25*eV, 2.48*eV, 2.58*eV, 
+                            2.7*eV, 2.82*eV, 2.95*eV, 3.1*eV, 3.18*eV, 
+                            3.26*eV, 3.35*eV, 3.44*eV};
+    G4double absLength[] = {79.32*cm, 141.01*cm, 188.99*cm, 572.76*cm, 572.76*cm, 
+                            284.94*cm, 284.94*cm, 284.94*cm, 188.99*cm, 188.99*cm, 
+                            112.23*cm, 93.03*cm, 54.64*cm, 25.80*cm, 14.93*cm, 
+                            7.41*cm, 3.14*cm, 1.04*cm};
+    const G4int absNbins = sizeof(absEnergy) / sizeof(G4double);
+    assert(sizeof(absEnergy) == sizeof(absLength));
+    
+    G4MaterialPropertiesTable* lgMPT = new G4MaterialPropertiesTable();
+    lgMPT->AddProperty("RINDEX", refEnergy, refIndex, refNbins)->SetSpline(true);
+    lgMPT->AddProperty("ABSLENGTH", absEnergy, absLength, absNbins)->SetSpline(true);
+    leadglass->SetMaterialPropertiesTable(lgMPT);
+    //
+    // Lead-glass mirror surface
+    G4OpticalSurface* lgMirrorSurface = new G4OpticalSurface("LGMirrorSurface");
+    lgMirrorSurface->SetType(dielectric_LUT);
+    lgMirrorSurface->SetModel(LUT);
+    lgMirrorSurface->SetFinish(polishedlumirrorair);
+    //
+    // Lead-glass taped surface
+    //G4OpticalSurface* lgTapedSurface = new G4OpticalSurface("LGTapedSurface");
+    //lgTapedSurface->SetType(dielectric_LUT);
+    //lgTapedSurface->SetModel(LUT);
+    //lgTapedSurface->SetFinish(groundbackpainted);
+    
+    
+    //----------------------------------------------------------------------------------
     // ** Volumes **
     //----------------------------------------------------------------------------------
     //
@@ -81,68 +134,17 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4VSolid* alPlateSolid = new G4SubtractionSolid("AlPlateSolid", alBoxSolid, alTubeSolid, G4Transform3D());
     G4LogicalVolume* alPlateLV = new G4LogicalVolume(alPlateSolid, al, "AlPlateLV");
     G4RotationMatrix rotAlPlate; rotAlPlate.rotateY(0.*deg); G4ThreeVector vAlPlate(5.5*mm, 0, 170.1*mm);
-    G4VPhysicalVolume* alPlatePV = new G4PVPlacement(G4Transform3D(rotAlPlate, vAlPlate), "AlPlatePV", alPlateLV, worldPV, false, 0, true);
+    /*G4VPhysicalVolume* alPlatePV = */new G4PVPlacement(G4Transform3D(rotAlPlate, vAlPlate), "AlPlatePV", alPlateLV, worldPV, false, 0, true);
     //
     // PMT Photocathode
     G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 38.*mm, 1.*mm, 0, 360.*deg);
     G4LogicalVolume* cathodeLV = new G4LogicalVolume(cathodeSolid, leadglass, "CathodeLV");
     G4RotationMatrix rotCathode; rotCathode.rotateY(0.*deg); G4ThreeVector vCathode(5.5*mm, 0, 201.*mm);
     new G4PVPlacement(G4Transform3D(rotCathode, vCathode), "CathodePV", cathodeLV, worldPV, false, 0, true);
-    
-    
-    //----------------------------------------------------------------------------------
-    // ** Optical Properties **
-    //----------------------------------------------------------------------------------
     //
-    // SF6W optical properties
-    G4double refEnergy[] = {1.24*eV, 1.27*eV, 1.29*eV, 1.32*eV, 1.35*eV, 
-                            1.38*eV, 1.41*eV, 1.44*eV, 1.48*eV, 1.51*eV, 
-                            1.55*eV, 1.59*eV, 1.63*eV, 1.68*eV, 1.72*eV, 
-                            1.77*eV, 1.82*eV, 1.88*eV, 1.94*eV, 2.0*eV, 
-                            2.07*eV, 2.14*eV, 2.21*eV, 2.3*eV, 2.38*eV, 
-                            2.48*eV, 2.58*eV, 2.7*eV, 2.82*eV, 2.95*eV, 
-                            3.1*eV, 3.26*eV, 3.44*eV, 3.65*eV, 3.87*eV, 
-                            4.13*eV, 4.43*eV, 4.77*eV, 5.17*eV, 5.64*eV, 6.2*eV};
-    G4double refIndex[] = {1.24*eV, 1.27*eV, 1.29*eV, 1.32*eV, 1.35*eV, 
-                            1.38*eV, 1.41*eV, 1.44*eV, 1.48*eV, 1.51*eV, 
-                            1.55*eV, 1.59*eV, 1.63*eV, 1.68*eV, 1.72*eV, 
-                            1.77*eV, 1.82*eV, 1.88*eV, 1.94*eV, 2.0*eV, 
-                            2.07*eV, 2.14*eV, 2.21*eV, 2.3*eV, 2.38*eV, 
-                            2.48*eV, 2.58*eV, 2.7*eV, 2.82*eV, 2.95*eV, 
-                            3.1*eV, 3.26*eV, 3.44*eV, 3.65*eV, 3.87*eV, 
-                            4.13*eV, 4.43*eV, 4.77*eV, 5.17*eV, 5.64*eV, 6.2*eV};
-    const G4int refNbins = sizeof(refEnergy) / sizeof(G4double);
-    assert(sizeof(refEnergy) == sizeof(refIndex));
-    
-    G4double absEnergy[] = {0.62*eV, 0.83*eV, 1.17*eV, 1.55*eV, 1.77*eV, 
-                            1.91*eV, 2.07*eV, 2.25*eV, 2.48*eV, 2.58*eV, 
-                            2.7*eV, 2.82*eV, 2.95*eV, 3.1*eV, 3.18*eV, 
-                            3.26*eV, 3.35*eV, 3.44*eV};
-    G4double absLength[] = {79.32*cm, 141.01*cm, 188.99*cm, 572.76*cm, 572.76*cm, 
-                            284.94*cm, 284.94*cm, 284.94*cm, 188.99*cm, 188.99*cm, 
-                            112.23*cm, 93.03*cm, 54.64*cm, 25.80*cm, 14.93*cm, 
-                            7.41*cm, 3.14*cm, 1.04*cm};
-    const G4int absNbins = sizeof(absEnergy) / sizeof(G4double);
-    assert(sizeof(absEnergy) == sizeof(absLength));
-    
-    G4MaterialPropertiesTable* lgMPT = new G4MaterialPropertiesTable();
-    lgMPT->AddProperty("RINDEX", refEnergy, refIndex, refNbins)->SetSpline(true);
-    lgMPT->AddProperty("ABSLENGTH", absEnergy, absLength, absNbins)->SetSpline(true);
-    leadglass->SetMaterialPropertiesTable(lgMPT);
-    //
-    // Lead-glass mirror surface
-    G4OpticalSurface* lgMirrorSurface = new G4OpticalSurface("LGMirrorSurface");
-    lgMirrorSurface->SetType(dielectric_LUT);
-    lgMirrorSurface->SetModel(LUT);
-    lgMirrorSurface->SetFinish(polishedlumirrorair);
+    // Optical border surfaces
     new G4LogicalBorderSurface("LGMirrorBorderSurface", lgBoxPV, worldPV, lgMirrorSurface);
-    //
-    // Lead-glass taped surface
-    G4OpticalSurface* lgTapedSurface = new G4OpticalSurface("LGTapedSurface");
-    new G4LogicalBorderSurface("LGTapedBorderSurface", lgBoxPV, alPlatePV, lgTapedSurface);
-    lgMirrorSurface->SetType(dielectric_LUT);
-    lgMirrorSurface->SetModel(LUT);
-    lgMirrorSurface->SetFinish(groundfrontpainted);
+    //new G4LogicalBorderSurface("LGTapedBorderSurface", lgBoxPV, alPlatePV, lgTapedSurface);
     
     // Visualization settings
     worldLV->SetVisAttributes(G4VisAttributes::Invisible);
