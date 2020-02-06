@@ -20,6 +20,7 @@ LGSimPrimaryGeneratorMessenger::LGSimPrimaryGeneratorMessenger(LGSimPrimaryGener
 
 LGSimPrimaryGeneratorMessenger::~LGSimPrimaryGeneratorMessenger()
 {
+    delete fPGA;
     delete fDir;
     delete fCmdTurnOnOff;
     delete fCmdVerbose;

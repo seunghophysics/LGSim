@@ -15,6 +15,7 @@ LGSimLGSDMessenger::LGSimLGSDMessenger(LGSimLGSD* lgSD)
 
 LGSimLGSDMessenger::~LGSimLGSDMessenger()
 {
+    delete fLGSD;
     delete fDir;
     delete fCmdVerbose;
 }
