@@ -18,6 +18,8 @@ int main(int argc, char** argv)
     G4int nThreads = G4Threading::G4GetNumberOfCores();
     runManager->SetNumberOfThreads(nThreads);
     
+    //auto runManager = new G4RunManager();
+    
     // physics list
     auto physicsList = new FTFP_BERT();
     physicsList->RegisterPhysics(new G4OpticalPhysics());
@@ -33,7 +35,7 @@ int main(int argc, char** argv)
     
     auto uiManager = G4UImanager::GetUIpointer();
     
-    auto uiExecutive = new G4UIExecutive(argc, argv);
+    auto uiExecutive = new G4UIExecutive(argc, argv, "tcsh");
     uiManager->ExecuteMacroFile("macro/LGSimDefault.mac");
     uiExecutive->SessionStart();
     
