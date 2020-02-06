@@ -11,6 +11,7 @@
 #include "CRYSetup.h"
 
 #include "LGSimPrimaryGeneratorAction.hh"
+#include "LGSimPrimaryGeneratorMessenger.hh"
 
 G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 {
@@ -35,36 +36,45 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 }
 
 LGSimPrimaryGeneratorAction::LGSimPrimaryGeneratorAction()
-: fParticleGun(nullptr), fParticleTable(nullptr), fCRYGenerator(nullptr)
+: fParticleGun(nullptr), fParticleTable(nullptr), 
+fCRYGenerator(nullptr), bCRY_STATUS(true), fPrimaryGeneratorMessenger(nullptr)
 {
     fParticleGun = new G4ParticleGun();
     fParticleTable = G4ParticleTable::GetParticleTable();
     
-    std::ifstream inputFile;
-    inputFile.open("CRY.setup", std::ios::in);
-    char buffer[1000];
+    fPrimaryGeneratorMessenger = new LGSimPrimaryGeneratorMessenger(this);
+    
+    if(bCRY_STATUS){
+        std::ifstream inputFile;
+        inputFile.open("CRY.setup", std::ios::in);
+        char buffer[1000];
+      
+        if(inputFile.fail())
+            G4cout << "Failed to open input file " << "CRY.setup" << G4endl;
+        else{
+                std::string setupString("");
+            while(!inputFile.getline(buffer,1000).eof()) {
+                setupString.append(buffer);
+                setupString.append(" ");
+            }
 
-    if(inputFile.fail())
-        G4cout << "Failed to open input file " << "CRY.setup" << G4endl;
-    else{
-        std::string setupString("");
-        while(!inputFile.getline(buffer,1000).eof()) {
-            setupString.append(buffer);
-            setupString.append(" ");
+        CRYSetup* crySetup = new CRYSetup(setupString, "/Users/seungho/Development/CRY/data");
+        fCRYGenerator = new CRYGenerator(crySetup);
         }
-
-    CRYSetup* crySetup = new CRYSetup(setupString, "/Users/seungho/Development/CRY/data");
-    fCRYGenerator = new CRYGenerator(crySetup);
     }
 }
 
 LGSimPrimaryGeneratorAction::~LGSimPrimaryGeneratorAction()
 {
     delete fParticleGun;
+    delete fParticleTable;
+    delete fCRYGenerator;
+    delete fPrimaryGeneratorMessenger;
 }
 
 void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    if(bCRY_STATUS){
         std::vector<CRYParticle*>* evVector = new std::vector<CRYParticle*>;
         evVector->clear();
         fCRYGenerator->genEvent(evVector);
@@ -95,7 +105,7 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle((*evVector)[j]->PDGid()));
             fParticleGun->SetParticleEnergy((*evVector)[j]->ke()*MeV);
             fParticleGun->GeneratePrimaryVertex(anEvent);
-            //G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
+            G4cout << "Triggered! Time simulated: " << fCRYGenerator->timeSimulated() << " sec" << G4endl;
             }
             else{
             fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
@@ -104,4 +114,7 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             }
             delete (*evVector)[j];
         }
+    }
+    
+    fParticleGun->GeneratePrimaryVertex(anEvent);
 }
