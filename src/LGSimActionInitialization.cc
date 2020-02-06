@@ -5,7 +5,7 @@
 LGSimActionInitialization::LGSimActionInitialization(LGSimRunAction* runAction)
 : G4VUserActionInitialization(), fRunAction(runAction) {}
 
-LGSimActionInitialization::~LGSimActionInitialization() {}
+LGSimActionInitialization::~LGSimActionInitialization() { delete fRunAction; }
 
 void LGSimActionInitialization::Build() const
 {
