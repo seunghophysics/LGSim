@@ -14,8 +14,11 @@ void LGSimRunAction::BeginOfRunAction(const G4Run*)
 {   
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->OpenFile("data");
-    analysisManager->SetFirstNtupleId(1);
-    analysisManager->SetFirstNtupleColumnId(1);
+    
+    if(analysisManager->GetFirstNtupleId() != 1)
+        analysisManager->SetFirstNtupleId(1);
+    if(analysisManager->GetFirstNtupleColumnId() != 1)
+        analysisManager->SetFirstNtupleColumnId(1);
     
     analysisManager->CreateNtuple("lg", "kinematics");
     analysisManager->CreateNtupleDColumn("initial_KE");
