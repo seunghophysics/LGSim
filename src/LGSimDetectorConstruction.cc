@@ -157,6 +157,7 @@ void LGSimDetectorConstruction::ConstructSDandField()
     LGSimLGSD* lgSD = new LGSimLGSD("LGSD");
     G4SDManager::GetSDMpointer()->AddNewDetector(lgSD);
     SetSensitiveDetector("LGBoxLV", lgSD);
+    SetSensitiveDetector("LGTubeLV", lgSD);
     
     LGSimPMT* pmtSD = new LGSimPMT("PMTSD");
     G4SDManager::GetSDMpointer()->AddNewDetector(pmtSD);
