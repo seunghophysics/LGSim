@@ -44,23 +44,21 @@ fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fPrimaryGeneratorMe
     
     fPrimaryGeneratorMessenger = new LGSimPrimaryGeneratorMessenger(this);
     
-    if(bCRY_STATUS){
-        std::ifstream inputFile;
-        inputFile.open("CRY.setup", std::ios::in);
-        char buffer[1000];
-      
-        if(inputFile.fail())
-            G4cout << "Failed to open input file " << "CRY.setup" << G4endl;
-        else{
-                std::string setupString("");
-            while(!inputFile.getline(buffer,1000).eof()) {
-                setupString.append(buffer);
-                setupString.append(" ");
-            }
-
-        CRYSetup* crySetup = new CRYSetup(setupString, "/Users/seungho/Development/CRY/data");
-        fCRYGenerator = new CRYGenerator(crySetup);
+    const char* crysetupfile = "CRY.setup";
+    std::ifstream inputFile;
+    inputFile.open(crysetupfile, std::ios::in);
+    char buffer[1000];
+    
+    if(inputFile.fail())
+        G4cout << "Failed to open input file " << crysetupfile << G4endl;
+    else{
+            std::string setupString("");
+        while(!inputFile.getline(buffer,1000).eof()) {
+            setupString.append(buffer);
+            setupString.append(" ");
         }
+    CRYSetup* crySetup = new CRYSetup(setupString, "/Users/seungho/Development/CRY/data");
+    fCRYGenerator = new CRYGenerator(crySetup);
     }
 }
 
