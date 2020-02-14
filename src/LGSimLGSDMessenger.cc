@@ -6,6 +6,8 @@
 LGSimLGSDMessenger::LGSimLGSDMessenger(LGSimLGSD* lgSD)
 : fLGSD(lgSD)
 {
+    fLGSD = lgSD;
+    
     fDir = new G4UIdirectory("/LGSD/");
     fDir->SetGuidance("LGSD control");
     
