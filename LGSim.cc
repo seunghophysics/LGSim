@@ -10,7 +10,6 @@
 #include "LGSimActionInitialization.hh"
 #include "LGSimDetectorConstruction.hh"
 #include "LGSimPrimaryGeneratorAction.hh"
-#include "LGSimRunAction.hh"
 
 int main(int argc, char** argv)
 {   
@@ -24,10 +23,9 @@ int main(int argc, char** argv)
     auto physicsList = new FTFP_BERT();
     physicsList->RegisterPhysics(new G4OpticalPhysics());
     runManager->SetUserInitialization(physicsList);
-    
-    auto runAction = new LGSimRunAction();
+
     runManager->SetUserInitialization(new LGSimDetectorConstruction());
-    runManager->SetUserInitialization(new LGSimActionInitialization(runAction));
+    runManager->SetUserInitialization(new LGSimActionInitialization());
     runManager->Initialize();
     
     //auto visExecutive = new G4VisExecutive();

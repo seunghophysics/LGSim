@@ -2,18 +2,19 @@
 #include "LGSimPrimaryGeneratorAction.hh"
 #include "LGSimRunAction.hh"
 
-LGSimActionInitialization::LGSimActionInitialization(LGSimRunAction* runAction)
-: G4VUserActionInitialization(), fRunAction(runAction) {}
+LGSimActionInitialization::LGSimActionInitialization()
+: G4VUserActionInitialization()
+{}
 
-LGSimActionInitialization::~LGSimActionInitialization() { delete fRunAction; }
+LGSimActionInitialization::~LGSimActionInitialization() {}
 
 void LGSimActionInitialization::Build() const
 {
-    SetUserAction(fRunAction);
+    SetUserAction(new LGSimRunAction());
     SetUserAction(new LGSimPrimaryGeneratorAction());
 }
 
 void LGSimActionInitialization::BuildForMaster() const
 {
-    SetUserAction(fRunAction);
+    SetUserAction(new LGSimRunAction());
 }
