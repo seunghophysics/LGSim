@@ -17,6 +17,8 @@ class LGSimPMT : public G4VSensitiveDetector
     
     private:
         G4int nhits;
+        G4double qe;                     // quantum efficiency of photocathode
+        G4double p2c;
 };
 
 #endif
