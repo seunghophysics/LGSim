@@ -30,6 +30,7 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4NistManager* nistManager = G4NistManager::Instance();
     G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
     G4Material* al = nistManager->FindOrBuildMaterial("G4_Al");
+    //G4Material* scint = nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
     //G4Material* leadglass = nistManager->FindOrBuildMaterial("G4_GLASS_LEAD");
     //
     // SiO2, PbO, K2O, Na2O for SF6W
