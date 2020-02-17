@@ -37,12 +37,12 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 
 LGSimPrimaryGeneratorAction::LGSimPrimaryGeneratorAction()
 : fParticleGun(nullptr), fParticleTable(nullptr), 
-fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fPrimaryGeneratorMessenger(nullptr)
+fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fMessenger(nullptr)
 {
     fParticleGun = new G4ParticleGun();
     fParticleTable = G4ParticleTable::GetParticleTable();
     
-    fPrimaryGeneratorMessenger = new LGSimPrimaryGeneratorMessenger(this);
+    fMessenger = new LGSimPrimaryGeneratorMessenger(this);
     
     const char* crysetupfile = "CRY.setup";
     std::ifstream inputFile;
@@ -64,10 +64,10 @@ fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fPrimaryGeneratorMe
 
 LGSimPrimaryGeneratorAction::~LGSimPrimaryGeneratorAction()
 {
-    delete fParticleGun;
-    delete fParticleTable;
-    delete fCRYGenerator;
-    delete fPrimaryGeneratorMessenger;
+    //delete fParticleGun;
+    //delete fParticleTable;
+    //delete fCRYGenerator;
+    //delete fMessenger;
 }
 
 void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)

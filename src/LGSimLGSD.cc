@@ -10,7 +10,7 @@ pathLength(0.), Edep(0.), initialKE(0.), initialKEChecked(false), fVerbosity(0)
     fMessenger = new LGSimLGSDMessenger(this);
 }
 
-LGSimLGSD::~LGSimLGSD() { delete fMessenger; }
+LGSimLGSD::~LGSimLGSD() {} //delete fMessenger; }
 
 void LGSimLGSD::Initialize(G4HCofThisEvent*)
 {
