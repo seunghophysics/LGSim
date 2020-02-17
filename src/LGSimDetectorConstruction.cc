@@ -102,10 +102,10 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     lgMirrorSurface->SetFinish(polishedlumirrorair);
     //
     // Lead-glass taped surface
-    //G4OpticalSurface* lgTapedSurface = new G4OpticalSurface("LGTapedSurface");
-    //lgTapedSurface->SetType(dielectric_LUT);
-    //lgTapedSurface->SetModel(LUT);
-    //lgTapedSurface->SetFinish(groundbackpainted);
+    G4OpticalSurface* lgTapedSurface = new G4OpticalSurface("LGTapedSurface");
+    lgTapedSurface->SetType(dielectric_LUT);
+    lgTapedSurface->SetModel(LUT);
+    lgTapedSurface->SetFinish(groundbackpainted);
     
     
     //----------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     G4VSolid* alPlateSolid = new G4SubtractionSolid("AlPlateSolid", alBoxSolid, alTubeSolid, G4Transform3D());
     G4LogicalVolume* alPlateLV = new G4LogicalVolume(alPlateSolid, al, "AlPlateLV");
     G4RotationMatrix rotAlPlate; rotAlPlate.rotateY(0.*deg); G4ThreeVector vAlPlate(5.5*mm, 0, 170.1*mm);
-    /*G4VPhysicalVolume* alPlatePV = */new G4PVPlacement(G4Transform3D(rotAlPlate, vAlPlate), "AlPlatePV", alPlateLV, worldPV, false, 0);
+    G4VPhysicalVolume* alPlatePV = new G4PVPlacement(G4Transform3D(rotAlPlate, vAlPlate), "AlPlatePV", alPlateLV, worldPV, false, 0);
     //
     // PMT Photocathode
     G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 38.*mm, 1.*mm, 0, 360.*deg);
@@ -151,7 +151,7 @@ G4VPhysicalVolume* LGSimDetectorConstruction::Construct()
     //
     // Optical border surfaces
     new G4LogicalBorderSurface("LGMirrorBorderSurface", lgBoxPV, alSidePV, lgMirrorSurface);
-    //new G4LogicalBorderSurface("LGTapedBorderSurface", lgBoxPV, alPlatePV, lgTapedSurface);
+    new G4LogicalBorderSurface("LGTapedBorderSurface", lgBoxPV, alPlatePV, lgTapedSurface);
     
     // Visualization settings
     worldLV->SetVisAttributes(G4VisAttributes::Invisible);
