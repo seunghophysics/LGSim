@@ -15,19 +15,19 @@
 
 G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 {
-    G4double t_top = (5*cm - pos.x()) / dir.x();
-    G4double t_bottom = (-5*cm - pos.x()) / dir.x();
+    G4double t_top = (30.3*cm - pos.y()) / dir.y();
+    G4double t_bottom = (-12.7*cm - pos.y()) / dir.y();
     
-    G4double y_top = pos.y() + dir.y() * t_top;
+    G4double x_top = pos.x() + dir.x() * t_top;
     G4double z_top = pos.z() + dir.z() * t_top;
-    G4double y_bottom = pos.y() + dir.y() * t_bottom;
+    G4double x_bottom = pos.x() + dir.x() * t_bottom;
     G4double z_bottom = pos.z() + dir.z() * t_bottom;
     
     //G4cout << "y_top: " << y_top / cm << " z_top: " << z_top / cm << G4endl;
     //G4cout << "y_bottom: " << y_bottom / cm << " z_bottom: " << z_bottom / cm << G4endl;
     
-    G4bool hitsTopBar = (-30*cm < y_top && y_top < 5*cm && -5*cm < z_top && z_top < 5*cm);
-    G4bool hitsBottomBar = (-5*cm < y_bottom && y_bottom < 30*cm && -5*cm < z_bottom && z_bottom < 5*cm);
+    G4bool hitsTopBar = (-23.8*cm < x_top && x_top < 6.2*cm && -7.5*cm < z_top && z_top < 7.5*cm);
+    G4bool hitsBottomBar = (-23.8*cm < x_bottom && x_bottom < 6.2*cm && -7.5*cm < z_bottom && z_bottom < 7.5*cm);
     
     //G4cout << "hitsTopBar: " << hitsTopBar << G4endl;
     //G4cout << "hitsBottomBar: " << hitsBottomBar << G4endl;
