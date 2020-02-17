@@ -31,7 +31,7 @@ class LGSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         G4bool bCRY_STATUS;
         G4int fCRYVerbosity;
         
-        LGSimPrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
+        LGSimPrimaryGeneratorMessenger* fMessenger;
 };
 
 
