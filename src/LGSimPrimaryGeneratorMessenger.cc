@@ -1,3 +1,4 @@
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -16,6 +17,10 @@ LGSimPrimaryGeneratorMessenger::LGSimPrimaryGeneratorMessenger(LGSimPrimaryGener
     
     fCmdVerbose = new G4UIcmdWithAnInteger("/CRY/verbose", this);
     fCmdVerbose->SetGuidance("Set CRY verbosity.");
+    
+    fCmdScintZ = new G4UIcmdWithADoubleAndUnit("/CRY/scintZfromCenter", this);
+    fCmdScintZ->SetGuidance("Set scintillator Z position from the center.");
+    fCmdScintZ->SetDefaultUnit("cm");
 }
 
 LGSimPrimaryGeneratorMessenger::~LGSimPrimaryGeneratorMessenger()
@@ -24,6 +29,7 @@ LGSimPrimaryGeneratorMessenger::~LGSimPrimaryGeneratorMessenger()
     delete fDir;
     delete fCmdTurnOnOff;
     delete fCmdVerbose;
+    delete fCmdScintZ;
 }
 
 void LGSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
@@ -40,5 +46,9 @@ void LGSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* cmd, G4String newV
             fPGA->SetCRY_Verbose(1);
         else if(newValue == "0")
             fPGA->SetCRY_Verbose(0);
+    }
+    
+    if(cmd == fCmdScintZ){
+        fPGA->SetScintZ(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(newValue));
     }
 }

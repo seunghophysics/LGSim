@@ -13,7 +13,7 @@
 #include "LGSimPrimaryGeneratorAction.hh"
 #include "LGSimPrimaryGeneratorMessenger.hh"
 
-G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
+G4bool LGSimPrimaryGeneratorAction::HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 {
     G4double t_top = (30.3*cm - pos.y()) / dir.y();
     G4double t_bottom = (-12.7*cm - pos.y()) / dir.y();
@@ -23,11 +23,11 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
     G4double x_bottom = pos.x() + dir.x() * t_bottom;
     G4double z_bottom = pos.z() + dir.z() * t_bottom;
     
-    //G4cout << "y_top: " << y_top / cm << " z_top: " << z_top / cm << G4endl;
-    //G4cout << "y_bottom: " << y_bottom / cm << " z_bottom: " << z_bottom / cm << G4endl;
+    //G4cout << "x_top: " << x_top / cm << " z_top: " << z_top / cm << G4endl;
+    //G4cout << "x_bottom: " << x_bottom / cm << " z_bottom: " << z_bottom / cm << G4endl;
     
-    G4bool hitsTopBar = (-23.8*cm < x_top && x_top < 6.2*cm && -7.5*cm < z_top && z_top < 7.5*cm);
-    G4bool hitsBottomBar = (-23.8*cm < x_bottom && x_bottom < 6.2*cm && -7.5*cm < z_bottom && z_bottom < 7.5*cm);
+    G4bool hitsTopBar = (-23.8*cm < x_top && x_top < 6.2*cm && -7.5*cm + scintZ < z_top && z_top < 7.5*cm + scintZ);
+    G4bool hitsBottomBar = (-23.8*cm < x_bottom && x_bottom < 6.2*cm && -7.5*cm + scintZ < z_bottom && z_bottom < 7.5*cm + scintZ);
     
     //G4cout << "hitsTopBar: " << hitsTopBar << G4endl;
     //G4cout << "hitsBottomBar: " << hitsBottomBar << G4endl;
@@ -37,7 +37,7 @@ G4bool HitsScintBars(G4ThreeVector pos, G4ThreeVector dir)
 
 LGSimPrimaryGeneratorAction::LGSimPrimaryGeneratorAction()
 : fParticleGun(nullptr), fParticleTable(nullptr), 
-fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), fMessenger(nullptr)
+fCRYGenerator(nullptr), bCRY_STATUS(true), fCRYVerbosity(0), scintZ(0.), fMessenger(nullptr)
 {
     fParticleGun = new G4ParticleGun();
     fParticleTable = G4ParticleTable::GetParticleTable();
@@ -86,14 +86,14 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
             //G4cout << "  "          << particleName << " "
             //    << "charge = "      << (*evVector)[j]->charge() << " "
             //     << "energy (MeV) = " << (*evVector)[j]->ke() * MeV << " "
-            //     << "pos (m) "
-            //     << G4ThreeVector((*evVector)[j]->x(), (*evVector)[j]->y(), (*evVector)[j]->z())
+            //     << "pos (mm) "
+            //     << G4ThreeVector((*evVector)[j]->x()*m, 10.*cm, (*evVector)[j]->y()*m)
             //     << " " << "direction cosines "
-            //    << G4ThreeVector((*evVector)[j]->u(), (*evVector)[j]->v(), (*evVector)[j]->w())
+            //    << G4ThreeVector((*evVector)[j]->u(), (*evVector)[j]->w(), (*evVector)[j]->v())
             //     << " " << G4endl;
             
-            G4ThreeVector pos = G4ThreeVector(10*cm, (*evVector)[j]->x()*m, (*evVector)[j]->y()*m);
-            G4ThreeVector dir = G4ThreeVector((*evVector)[j]->w(), (*evVector)[j]->u(), (*evVector)[j]->v());
+            G4ThreeVector pos = G4ThreeVector((*evVector)[j]->x()*m, 10.*cm, (*evVector)[j]->y()*m);
+            G4ThreeVector dir = G4ThreeVector((*evVector)[j]->u(), (*evVector)[j]->w(), (*evVector)[j]->v());
             
             fParticleGun->SetParticlePosition(pos);
             fParticleGun->SetParticleMomentumDirection(dir);
@@ -116,4 +116,11 @@ void LGSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
     
     fParticleGun->GeneratePrimaryVertex(anEvent);
+    G4ThreeVector gunpos = fParticleGun->GetParticlePosition();
+    G4ThreeVector gundir = fParticleGun->GetParticleMomentumDirection();
+    if(HitsScintBars(gunpos, gundir)){
+        if(fCRYVerbosity){
+            G4cout << "Coincidence Hit!" << G4endl;
+        }
+    }
 }

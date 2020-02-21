@@ -6,6 +6,7 @@
 class LGSimPrimaryGeneratorAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 
 class LGSimPrimaryGeneratorMessenger : public G4UImessenger
 {
@@ -20,6 +21,7 @@ class LGSimPrimaryGeneratorMessenger : public G4UImessenger
         G4UIdirectory* fDir;
         G4UIcmdWithAString* fCmdTurnOnOff;
         G4UIcmdWithAnInteger* fCmdVerbose;
+        G4UIcmdWithADoubleAndUnit* fCmdScintZ;
 };
 
 #endif
