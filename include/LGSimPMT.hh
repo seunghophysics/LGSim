@@ -11,13 +11,14 @@ class LGSimPMT : public G4VSensitiveDetector
         LGSimPMT(G4String name);
         ~LGSimPMT();
         
+        G4double GetQE(G4double energy);
+        
         void Initialize(G4HCofThisEvent*);
         G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*);
         void EndOfEvent(G4HCofThisEvent*);
-    
+        
     private:
-        G4int nhits;
-        G4double qe;                     // quantum efficiency of photocathode
+        G4double qe_nhits;
         G4double p2c;
 };
 
