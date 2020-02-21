@@ -45,3 +45,4 @@ bin/
 # Others
 .DS_Store
 *.ipynb
+*.pdf
