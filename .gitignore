@@ -39,7 +39,7 @@ build/
 bin/
 
 # Output
-*.txt
+#*.txt
 *.csv
 
 # Others

@@ -3,8 +3,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-class LGSimRunAction;
-
 class LGSimDetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
