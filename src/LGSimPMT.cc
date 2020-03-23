@@ -39,6 +39,7 @@ G4bool LGSimPMT::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {   
     auto aTrack = aStep->GetTrack();
     auto aParticle = aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    auto hitTime = aTrack->GetGlobalTime();
     
     if(aParticle == "opticalphoton" && aStep->IsFirstStepInVolume()){
         qe_nhits += GetQE(aTrack->GetKineticEnergy());
