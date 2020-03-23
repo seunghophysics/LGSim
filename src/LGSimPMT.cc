@@ -5,7 +5,10 @@
 #include "LGSimPMT.hh"
 
 LGSimPMT::LGSimPMT(G4String name) 
-:G4VSensitiveDetector(name), qe_nhits(0.), p2c(3.8e-13) {}
+:G4VSensitiveDetector(name), qe_nhits(0.), p2c(3.8e-13) 
+{
+    collectionName.insert("LGSimPMTHitCollection");
+}
 
 LGSimPMT::~LGSimPMT() {}
 
@@ -29,8 +32,14 @@ G4double LGSimPMT::GetQE(G4double energy)
     
 }
 
-void LGSimPMT::Initialize(G4HCofThisEvent*)
+void LGSimPMT::Initialize(G4HCofThisEvent* HCE)
 {
+    hitCollection = new LGSimPMTHitCollection(GetName(), collectionName[0]);
+    
+    static G4int HCID = -1;
+    if(HCID < 0) HCID = GetCollectionID(0);
+    HCE->AddHitsCollection(HCID, hitCollection);
+    
     qe_nhits = 0;
     p2c = 8.4e-13;                 // photon-to-charge ratio (gain)
 }
@@ -39,11 +48,22 @@ G4bool LGSimPMT::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {   
     auto aTrack = aStep->GetTrack();
     auto aParticle = aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName();
-    auto hitTime = aTrack->GetGlobalTime();
+    
+    G4double eqCharge = 0.;
+    G4double qe = 0.;
     
     if(aParticle == "opticalphoton" && aStep->IsFirstStepInVolume()){
-        qe_nhits += GetQE(aTrack->GetKineticEnergy());
+        qe = GetQE(aTrack->GetKineticEnergy());
+        qe_nhits += qe;
+        eqCharge = p2c * qe;
+        
+        LGSimPMTHit* aHit = new LGSimPMTHit();
+        aHit->SetEqCharge(eqCharge);
+        aHit->SetHitTime(aTrack->GetGlobalTime());
+        hitCollection->insert(aHit);
     }
+    
+    
     
     return true;
 }
@@ -59,5 +79,7 @@ void LGSimPMT::EndOfEvent(G4HCofThisEvent*)
         analysisManager->AddNtupleRow(2);
         //G4cout << "Hit: " << nhits << " photons" << G4endl;
         //G4cout << "Deposited charge: " << q_dep * 1e12 << " pC" << G4endl;
-    }      
+    }
+    
+    for ( G4int i=0; i<hitCollection->entries(); i++ ) (*hitCollection)[i]->Print();
 }

@@ -3,6 +3,8 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "LGSimPMTHit.hh"
+
 class LGSimRunAction;
 
 class LGSimPMT : public G4VSensitiveDetector
@@ -18,6 +20,7 @@ class LGSimPMT : public G4VSensitiveDetector
         void EndOfEvent(G4HCofThisEvent*);
         
     private:
+        LGSimPMTHitCollection* hitCollection;
         G4double qe_nhits;
         G4double p2c;
 };
