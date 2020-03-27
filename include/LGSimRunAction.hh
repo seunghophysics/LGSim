@@ -2,7 +2,7 @@
 #define LGSimRunAction_HH 1
 
 #include <fstream>
-#include <mutex>
+//#include <mutex>
 
 #include "globals.hh"
 #include "G4UserRunAction.hh"

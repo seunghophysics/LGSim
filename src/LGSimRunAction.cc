@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "G4AutoLock.hh"
+//#include "G4AutoLock.hh"
 #include "globals.hh"
 
 #include "LGSimAnalysis.hh"
