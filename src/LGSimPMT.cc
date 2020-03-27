@@ -1,3 +1,6 @@
+#include <fstream>
+#include <string>
+
 #include "G4SystemOfUnits.hh"
 
 #include "LGSimAnalysis.hh"
@@ -60,16 +63,16 @@ G4bool LGSimPMT::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         LGSimPMTHit* aHit = new LGSimPMTHit();
         aHit->SetEqCharge(eqCharge);
         aHit->SetHitTime(aTrack->GetGlobalTime());
-        hitCollection->insert(aHit);
+        if(eqCharge) hitCollection->insert(aHit);
     }
-    
-    
     
     return true;
 }
 
 void LGSimPMT::EndOfEvent(G4HCofThisEvent*)
 {
+    static G4int eventID = 1;
+    
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
     G4double q_dep = qe_nhits * p2c;      // deposited charge
@@ -81,5 +84,18 @@ void LGSimPMT::EndOfEvent(G4HCofThisEvent*)
         //G4cout << "Deposited charge: " << q_dep * 1e12 << " pC" << G4endl;
     }
     
-    for ( G4int i=0; i<hitCollection->entries(); i++ ) (*hitCollection)[i]->Print();
+    //G4int threadID = G4Threading::G4GetThreadId();
+    
+    std::ofstream signalCSV;
+    //std::string fileName("signal_" + std::to_string(threadID) + ".csv");
+    //signalCSV.open(fileName.c_str(), std::ios_base::app);
+    signalCSV.open("signal.csv", std::ios_base::app);
+    
+    for(G4int i=0; i<(G4int)hitCollection->entries(); i++){
+        signalCSV << eventID << "," 
+                    << (*hitCollection)[i]->GetHitTime() << "," 
+                    << (*hitCollection)[i]->GetEqCharge() << std::endl;
+    }
+    
+    eventID++;
 }
