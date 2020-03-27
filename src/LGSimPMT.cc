@@ -6,10 +6,12 @@
 #include "LGSimAnalysis.hh"
 #include "LGSimRunAction.hh"
 #include "LGSimPMT.hh"
+#include "LGSimPMTMessenger.hh"
 
 LGSimPMT::LGSimPMT(G4String name) 
-:G4VSensitiveDetector(name), qe_nhits(0.), p2c(3.8e-13) 
+:G4VSensitiveDetector(name), fMessenger(nullptr), qe_nhits(0.), p2c(3.8e-13), fileName("signal.csv")
 {
+    fMessenger = new LGSimPMTMessenger(this);
     collectionName.insert("LGSimPMTHitCollection");
 }
 
@@ -89,7 +91,7 @@ void LGSimPMT::EndOfEvent(G4HCofThisEvent*)
     std::ofstream signalCSV;
     //std::string fileName("signal_" + std::to_string(threadID) + ".csv");
     //signalCSV.open(fileName.c_str(), std::ios_base::app);
-    signalCSV.open("signal.csv", std::ios_base::app);
+    signalCSV.open(fileName.data(), std::ios_base::app);
     
     for(G4int i=0; i<(G4int)hitCollection->entries(); i++){
         signalCSV << eventID << "," 
